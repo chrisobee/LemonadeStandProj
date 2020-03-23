@@ -23,5 +23,37 @@ namespace LemonadeStand_3DayStarter
 
             return quantityOfItem;
         }
+
+        public static int CheckMenuInput()
+        {
+            bool correctInput = false;
+            int userInput = 0;
+            while (!correctInput)
+            {
+                correctInput = Int32.TryParse(Console.ReadLine(), out userInput);
+                if (correctInput == false)
+                {
+                    Console.WriteLine("Invalid Input");
+                }
+            }
+            return userInput;
+        }
+        
+        public static double CheckDoubleInput()
+        {
+            bool correctInput = false;
+            double userInput = 0;
+            while (!correctInput)
+            {
+                correctInput = Double.TryParse(Console.ReadLine(), out userInput);
+                if(correctInput == false)
+                {
+                    Console.WriteLine("Invalid Input");
+                }
+            }
+            return userInput;
+        }
+
+
     }
 }
