@@ -11,7 +11,10 @@ namespace LemonadeStand_3DayStarter
         //member variables
         public int cupsLeftInPitcher;
         //constructor
-
+        public Pitcher()
+        {
+            cupsLeftInPitcher = 10;
+        }
         //member methods
 
     }

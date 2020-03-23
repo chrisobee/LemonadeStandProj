@@ -16,6 +16,7 @@ namespace LemonadeStand_3DayStarter
             {
                 return money;
             }
+
         }
 
         public Wallet()
@@ -26,6 +27,11 @@ namespace LemonadeStand_3DayStarter
         public void PayMoneyForItems(double transactionAmount)
         {
             money -= transactionAmount;
+        }
+
+        public void ReceiveMoneyFromCustomer(double pricePerCup)
+        {
+            money += pricePerCup;
         }
     }
 }

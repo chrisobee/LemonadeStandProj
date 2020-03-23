@@ -59,5 +59,37 @@ namespace LemonadeStand_3DayStarter
                 cups.Add(cup);
             }
         }
+
+        public void RemoveLemonsFromInventory(int numberOfLemons)
+        {
+            for (int i = 0; i < numberOfLemons; i++)
+            {
+                lemons.Remove(lemons[i]);
+            }
+        }
+
+        public void RemoveSugarCubesFromInventory(int numberOfSugarCubes)
+        {
+            for (int i = 0; i < numberOfSugarCubes; i++)
+            {
+                sugarCubes.Remove(sugarCubes[i]);
+            }
+        }
+
+        public void RemoveIceCubesFromInventory(int numberOfIceCubes)
+        {
+            for (int i = 0; i < numberOfIceCubes; i++)
+            {
+                iceCubes.Remove(iceCubes[i]);
+            }
+        }
+
+        public void RemoveCupsFromInventory(int numberOfCups)
+        {
+            for (int i = 0; i < numberOfCups; i++)
+            {
+                cups.Remove(cups[i]);
+            }
+        }
     }
 }

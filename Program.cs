@@ -8,8 +8,14 @@ namespace LemonadeStand_3DayStarter
 {
     class Program
     {
+        
         static void Main(string[] args)
         {
+            Game game = new Game();
+
+            Console.WriteLine("LEMONADE STAND\nPress Enter to Begin");
+            Console.ReadLine();
+            game.RunGame();
 
         }
     }

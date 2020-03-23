@@ -28,22 +28,21 @@ namespace LemonadeStand_3DayStarter
             days = new List<Day>();
             for (int i = 1; i <= 7; i++)
             {
-                InitializeDay(i);
-                GenerateAmountOfCustomers(days[currentDay], days[currentDay].weather.condition, days[currentDay].weather.temp);
-                menu.DisplayGameMenu(player, store);
+                currentDay = i;
+                InitializeDay(currentDay);
+                GenerateAmountOfCustomers(days[currentDay - 1], days[currentDay - 1].weather.condition, days[currentDay - 1].weather.temp);
+                menu.DisplayGameMenu(player, store, days, currentDay);
+                SalePhase(days[currentDay - 1]);
             }
-            
-
         }
-
-        public void InitializeDay(int i)
+        public void InitializeDay(int currentDay)
         {
-            currentDay = i;
-            days.Add(new Day(currentDay));
-            Console.WriteLine($"It is Day: {days[currentDay]}");
-            Console.WriteLine($"The Weather Condition is: {days[currentDay].weather.condition}");
-            Console.WriteLine($"The Temperature is: {days[currentDay].weather.temp}F");
+            days.Add(new Day());
+            Console.WriteLine($"It is Day: {currentDay}");
+            Console.WriteLine($"The Weather Condition is: {days[currentDay - 1].weather.condition}");
+            Console.WriteLine($"The Temperature is: {days[currentDay - 1].weather.temp}F");
             Console.WriteLine($"Your current fundage is: ${player.wallet.Money}");
+            Console.ReadLine();
         }
 
         public void GenerateAmountOfCustomers(Day day, string condition, int temp)
@@ -111,12 +110,47 @@ namespace LemonadeStand_3DayStarter
             {
                 day.customers.Add(new Customer($"{i}"));
             }
+            GenerateCustomerChances(day);
+        }
+
+        public void GenerateCustomerChances(Day day)
+        {
+            foreach (Customer customer in day.customers)
+            {
+                customer.chances = day.GenerateLikelihood(day.weather.condition, day.weather.temp);
+            }
         }
 
 
-        public void SalePhase()
+        public void SalePhase(Day day)
         {
+            player.pitcher = player.MakeNewPitcher();
+            foreach (Customer customer in day.customers)
+            {
+                if (UserInterface.CheckForEmptyPitcher(player.pitcher))
+                {
+                    if(UserInterface.CheckIfEnoughIngredients(player.inventory.cups, player.inventory.lemons, player.inventory.sugarCubes, player.inventory.iceCubes, player.recipe, player.pitcher))
+                    {
+                        player.pitcher = player.MakeNewPitcher();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Not enough ingredients for another pitcher :(");
+                        break;
+                    }
+                }
 
+                customer.ChangeChancesDueToPrice(player.recipe.pricePerCup, day.standardPricePerCup);
+                if (customer.BuyLemonade())
+                {
+                    player.pitcher.cupsLeftInPitcher--;
+                    day.cupsSold++;
+                    player.wallet.ReceiveMoneyFromCustomer(player.recipe.pricePerCup);
+                    day.profits += player.recipe.pricePerCup;
+                }
+            }
+
+            Console.WriteLine($"You sold {day.cupsSold} cups and made ${day.profits}");
         }
 
 
