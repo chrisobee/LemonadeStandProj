@@ -15,6 +15,7 @@ namespace LemonadeStand_3DayStarter
         Store store = new Store();
         List<Day> days;
         int currentDay;
+        
         //Constructor
 
         //Member Methods
@@ -31,14 +32,23 @@ namespace LemonadeStand_3DayStarter
         {
             ChoosePlayerName();
             days = new List<Day>();
+            int finalDay = 7;
             for (int i = 1; i <= 7; i++)
             {
-                currentDay = i;
-                InitializeDay(currentDay);
-                days[currentDay - 1].GenerateAmountOfCustomers();
-                menu.DisplayGameMenu(player, store, days, currentDay);
-                SalePhase(days[currentDay - 1]);
+                if(player.wallet.Money <= 0)
+                {
+                    break;
+                }
+                else
+                {
+                    currentDay = i;
+                    InitializeDay(currentDay);
+                    days[currentDay - 1].GenerateAmountOfCustomers();
+                    menu.DisplayGameMenu(player, store, days, currentDay);
+                    SalePhase(days[currentDay - 1]);
+                }
             }
+            Console.WriteLine($"GAME OVER\nYou made it to the {currentDay} day.\nYou made ${player.totalProfits}");
         }
         public void InitializeDay(int currentDay)
         {
@@ -50,13 +60,6 @@ namespace LemonadeStand_3DayStarter
             Console.WriteLine($"Your current fundage is: ${player.wallet.Money}");
             Console.ReadLine();
         }
-
-        
-
-        
-
-        
-
 
         public void SalePhase(Day day)
         {
@@ -106,6 +109,7 @@ namespace LemonadeStand_3DayStarter
                     day.cupsSold++;
                     player.wallet.ReceiveMoneyFromCustomer(player.recipe.pricePerCup);
                     day.profits += player.recipe.pricePerCup;
+                    player.totalProfits += day.profits;
                 }
                 else
                 {
