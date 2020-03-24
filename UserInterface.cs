@@ -64,13 +64,14 @@ namespace LemonadeStand_3DayStarter
             return needNewPitcher;
         }
 
-        public static bool CheckIfEnoughIngredients(List<Cup> cups, List<Lemon> lemons, List<SugarCube> sugarCubes, List<IceCube> iceCubes, Recipe recipe, Pitcher pitcher)
+        public static bool CheckIfEnoughIngredients(Player player)
         {
+            int cupsForOnePitcher = 10;
             bool enoughIngredients = true;
-            if(cups.Count < pitcher.cupsLeftInPitcher ||
-               lemons.Count < recipe.amountOfLemons ||
-               sugarCubes.Count < recipe.amountOfSugarCubes ||
-               iceCubes.Count < (recipe.amountOfIceCubes * pitcher.cupsLeftInPitcher))
+            if(player.inventory.cups.Count < cupsForOnePitcher ||
+               player.inventory.lemons.Count < player.recipe.amountOfLemons ||
+               player.inventory.sugarCubes.Count < player.recipe.amountOfSugarCubes ||
+               player.inventory.iceCubes.Count < player.recipe.amountOfIceCubes)
             {
                 enoughIngredients = false;
             }

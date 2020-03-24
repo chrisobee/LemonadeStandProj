@@ -10,6 +10,7 @@ namespace LemonadeStand_3DayStarter
     {
         //Member Variables
         Player player = new Player();
+        Random rand = new Random();
         Menu menu = new Menu();
         Store store = new Store();
         List<Day> days;
@@ -117,40 +118,77 @@ namespace LemonadeStand_3DayStarter
         {
             foreach (Customer customer in day.customers)
             {
-                customer.chances = day.GenerateLikelihood(day.weather.condition, day.weather.temp);
+                customer.Chances = day.GenerateLikelihood(day.weather.condition, day.weather.temp);
             }
         }
 
 
         public void SalePhase(Day day)
         {
-            player.pitcher = player.MakeNewPitcher();
-            foreach (Customer customer in day.customers)
+            bool firstPitcherCheck = UserInterface.CheckIfEnoughIngredients(player);
+
+            while (firstPitcherCheck)
             {
+                player.pitcher = player.MakeNewPitcher();
+
+                foreach (Customer customer in day.customers)
+                {
+                    if (UserInterface.CheckForEmptyPitcher(player.pitcher))
+                    {
+                        if (UserInterface.CheckIfEnoughIngredients(player))
+                        {
+                            player.pitcher = player.MakeNewPitcher();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    CheckForCustomerPurchase(day, customer);
+                }
+                firstPitcherCheck = false;
+            }
+            DisplayEndOfDay(day);
+        }
+
+        public void CheckForCustomerPurchase(Day day, Customer customer)
+        {
+            bool multipleCups = true;
+
+            customer.ChangeChancesDueToPrice(player.recipe.pricePerCup, day.standardPricePerCup);
+            do
+            {
+                int buyCheck = rand.Next(0, customer.Chances);
+
                 if (UserInterface.CheckForEmptyPitcher(player.pitcher))
                 {
-                    if(UserInterface.CheckIfEnoughIngredients(player.inventory.cups, player.inventory.lemons, player.inventory.sugarCubes, player.inventory.iceCubes, player.recipe, player.pitcher))
-                    {
-                        player.pitcher = player.MakeNewPitcher();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Not enough ingredients for another pitcher :(");
-                        break;
-                    }
+                    multipleCups = false;
+                    break;
                 }
-
-                customer.ChangeChancesDueToPrice(player.recipe.pricePerCup, day.standardPricePerCup);
-                if (customer.BuyLemonade())
+                else if (customer.BuyLemonade(buyCheck))
                 {
                     player.pitcher.cupsLeftInPitcher--;
                     day.cupsSold++;
                     player.wallet.ReceiveMoneyFromCustomer(player.recipe.pricePerCup);
                     day.profits += player.recipe.pricePerCup;
                 }
+                else
+                {
+                    multipleCups = false;
+                }
             }
+            while (multipleCups == true);
+            
+        }
 
-            Console.WriteLine($"You sold {day.cupsSold} cups and made ${day.profits}");
+        public void DisplayEndOfDay(Day day)
+        {
+            Console.WriteLine($"You sold {day.cupsSold} cups and made ${day.profits}\nAll of your Ice Cubes have melted!");
+            Console.WriteLine("--------------------------------------");
+            Console.ReadLine();
+            Console.Clear();
+            player.inventory.iceCubes.Clear();
+            
         }
 
 

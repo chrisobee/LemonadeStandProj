@@ -12,7 +12,25 @@ namespace LemonadeStand_3DayStarter
         public string name;
         Random rand = new Random();
         public List<string> names = new List<string>();
-        public int chances;
+        private int chances;
+        public int Chances
+        {
+            get
+            {
+                return chances;
+            }
+            set
+            {
+                if(value < 0)
+                {
+                    chances = 0;
+                }
+                else
+                {
+                    chances = value;
+                }
+            }
+        }
         public bool willBuy;
         
         //Constructor
@@ -27,6 +45,7 @@ namespace LemonadeStand_3DayStarter
         {
             double incrementCheck;
             incrementCheck = (Math.Abs(pricePerCup - standardPricePerCup)) * 100;
+
             if (pricePerCup > standardPricePerCup)
             {
                 for (int i = 0; i <= incrementCheck; i++)
@@ -42,10 +61,9 @@ namespace LemonadeStand_3DayStarter
                 }
             }
         }
-        public bool BuyLemonade()
+        public bool BuyLemonade(int buyCheck)
         {
             int willBuyNumber = 3;
-            int buyCheck = rand.Next(chances);
             if(buyCheck <= willBuyNumber)
             {
                 willBuy = true;
@@ -59,12 +77,12 @@ namespace LemonadeStand_3DayStarter
 
         public void DecreaseChances()
         {
-            chances++;
+            Chances++;
         }
 
         public void IncreaseChances()
         {
-            chances--;
+            Chances--;
         }
         
     }
