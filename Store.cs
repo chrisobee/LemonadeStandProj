@@ -37,7 +37,7 @@ namespace LemonadeStand_3DayStarter
 
         public void SellSugarCubes(Player player)
         {
-            int sugarToPurchase = UserInterface.GetNumberOfItems("sugar", pricePerSugarCube);
+            int sugarToPurchase = UserInterface.GetNumberOfItems("sugar cubes", pricePerSugarCube);
             double transactionAmount = CalculateTransactionAmount(sugarToPurchase, pricePerSugarCube);
             if(player.wallet.Money >= transactionAmount)
             {

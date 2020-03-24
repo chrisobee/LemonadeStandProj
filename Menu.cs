@@ -65,6 +65,7 @@ namespace LemonadeStand_3DayStarter
 
         public void DisplayDayStats(Player player, List<Day> days, int currentDay)
         {
+            Console.WriteLine($"It is {player.name}'s turn");
             Console.WriteLine($"It is Day: {currentDay}");
             Console.WriteLine($"The Weather Condition is: {days[currentDay - 1].weather.condition}");
             Console.WriteLine($"The Temperature is: {days[currentDay - 1].weather.temp}F");

@@ -22,22 +22,20 @@ namespace LemonadeStand_3DayStarter
             weather.condition = weather.GenerateRandomCondition();
             weather.temp = weather.GenerateRandomTemp();
             customers = new List<Customer>();
-
-            
         }
         //Member Methods
-        public int GenerateLikelihood(string condition, int temp)
+        public int GenerateLikelihood()
         {
             int likelihood;
-            if (temp <= 70)
+            if (weather.temp <= 70)
             {
                 //Making sure to take into account this standard price that changes due to weather conditions
                 standardPricePerCup = .15;
-                if (weather.goodWeatherConditions.Contains(condition))
+                if (weather.goodWeatherConditions.Contains(weather.condition))
                 {
                     likelihood = 10;
                 }
-                else if (weather.badWeatherConditions.Contains(condition))
+                else if (weather.badWeatherConditions.Contains(weather.condition))
                 {
                     likelihood = 15;
                 }
@@ -46,15 +44,15 @@ namespace LemonadeStand_3DayStarter
                     likelihood = 20;
                 }
             }
-            else if (temp <= 90)
+            else if (weather.temp <= 90)
             {
                 //Making sure to take into account this standard price that changes due to weather conditions
                 standardPricePerCup = .25;
-                if (weather.goodWeatherConditions.Contains(condition))
+                if (weather.goodWeatherConditions.Contains(weather.condition))
                 {
-                    likelihood = 5;
+                    likelihood = 7;
                 }
-                else if (weather.badWeatherConditions.Contains(condition))
+                else if (weather.badWeatherConditions.Contains(weather.condition))
                 {
                     likelihood = 10;
                 }
@@ -67,13 +65,13 @@ namespace LemonadeStand_3DayStarter
             {
                 //Making sure to take into account this standard price that changes due to weather conditions
                 standardPricePerCup = .35;
-                if (weather.goodWeatherConditions.Contains(condition))
-                {
-                    likelihood = 3;
-                }
-                else if (weather.badWeatherConditions.Contains(condition))
+                if (weather.goodWeatherConditions.Contains(weather.condition))
                 {
                     likelihood = 5;
+                }
+                else if (weather.badWeatherConditions.Contains(weather.condition))
+                {
+                    likelihood = 8;
                 }
                 else
                 {
@@ -82,6 +80,45 @@ namespace LemonadeStand_3DayStarter
             }
 
             return likelihood;
+        }
+
+        public void GenerateAmountOfCustomers()
+        {
+            int numberOfCustomers;
+            int likelihood = GenerateLikelihood();
+
+            if (likelihood <= 20 && likelihood >= 15)
+            {
+                numberOfCustomers = 20;
+                GenerateCustomers(numberOfCustomers);
+            }
+            else if (likelihood < 15 && likelihood >= 10)
+            {
+                numberOfCustomers = 30;
+                GenerateCustomers(numberOfCustomers);
+            }
+            else if (likelihood < 10 && likelihood >= 5)
+            {
+                numberOfCustomers = 50;
+                GenerateCustomers(numberOfCustomers);
+            }
+        }
+
+        public void GenerateCustomers(int numberOfCustomers)
+        {
+            for (int i = 0; i <= numberOfCustomers; i++)
+            {
+                customers.Add(new Customer($"{i}"));
+            }
+            GenerateCustomerChances();
+        }
+
+        public void GenerateCustomerChances()
+        {
+            foreach (Customer customer in customers)
+            {
+                customer.Chances = GenerateLikelihood();
+            }
         }
 
 
