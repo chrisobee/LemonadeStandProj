@@ -1,1 +1,1 @@
-{"playerData":[{"Name":"Chris","Money":20.0,"CurrentDay":1,"NumberOfCups":0,"NumberOfLemons":0,"NumberOfSugarCubes":0,"NumberOfIceCubes":0},{"Name":"Austi","Money":20.0,"CurrentDay":1,"NumberOfCups":0,"NumberOfLemons":0,"NumberOfSugarCubes":0,"NumberOfIceCubes":0}]}
+{"playerData":[{"Name":"Chris","Money":4.71000000000001,"CurrentDay":4,"NumberOfCups":50,"NumberOfLemons":4,"NumberOfSugarCubes":22,"NumberOfIceCubes":0},{"Name":"Austin","Money":3.7500000000000107,"CurrentDay":3,"NumberOfCups":60,"NumberOfLemons":4,"NumberOfSugarCubes":19,"NumberOfIceCubes":0}]}

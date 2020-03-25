@@ -10,7 +10,7 @@ namespace LemonadeStand_3DayStarter
 {
     class Menu
     {
-        public void DisplayGameMenu(Player currentPlayer, Store store, List<Day> days, int currentDay, bool onePlayer, List<Player> allPlayers)
+        public void DisplayGameMenu(Player currentPlayer, Store store, List<Day> days, int currentDay, List<Player> allPlayers)
         {
             bool dayStarted = false;
 
@@ -64,7 +64,7 @@ namespace LemonadeStand_3DayStarter
                         currentPlayer.ChangeRecipe();
                         break;
                     case 8:
-                        SaveGame(allPlayers, currentDay, onePlayer);
+                        SaveGame(allPlayers, days);
                         break;
                     case 9:
                         dayStarted = true;
@@ -87,8 +87,9 @@ namespace LemonadeStand_3DayStarter
             Console.WriteLine($"Your current fundage is: ${player.wallet.Money}");
         }
 
-        public void SaveGame(List<Player> players, int currentDay, bool onePlayer)
+        public void SaveGame(List<Player> players, List<Day> days)
         {
+            int daysSize = days.Count();
             SaveData saveData = new SaveData();
             foreach(Player player in players)
             {
@@ -96,7 +97,7 @@ namespace LemonadeStand_3DayStarter
                 {
                     Name = player.name,
                     Money = player.wallet.Money,
-                    CurrentDay = currentDay,
+                    CurrentDay = player.loadedCurrentDay,
                     NumberOfCups = player.inventory.cups.Count(),
                     NumberOfLemons = player.inventory.lemons.Count(),
                     NumberOfSugarCubes = player.inventory.sugarCubes.Count(),
@@ -104,13 +105,9 @@ namespace LemonadeStand_3DayStarter
                 };
                 saveData.playerData.Add(data);
             }
-                
-                string json = JsonConvert.SerializeObject(saveData);
-                string path = @"C:\Users\chris\source\repos\LemonadeStand_3DayStarter\SaveFile.txt";
-                File.WriteAllText(path, json);
-                SaveData loadedData = JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(path));
-            path = string.Empty;
-            
+            string json = JsonConvert.SerializeObject(saveData);
+            string path = @"C:\Users\chris\source\repos\LemonadeStand_3DayStarter\SaveFile.txt";
+            File.WriteAllText(path, json);
         }
     }
 }

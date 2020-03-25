@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +11,7 @@ namespace LemonadeStand_3DayStarter
     class Game
     {
         //Member Variables
-        Player playerOne;
-        Player playerTwo;
+        public SaveData loadedData;
         Random rand = new Random();
         Menu menu = new Menu();
         Store store = new Store();
@@ -21,25 +22,17 @@ namespace LemonadeStand_3DayStarter
         //Constructor
 
         //Member Methods
-
-        // O- Open/closed principle because this method for choosing the player's name allows for more functionality when multiplayer is added
-        // The source code won't be changed to add more players; however, the new functionality can be added on
-        public void ChoosePlayerName(Player player)
-        {
-            Console.WriteLine("Choose the name of the player");
-            player.name = Console.ReadLine();
-        }
-
         public void RunGame()
         {
             bool restartGameCheck = false;
             List<Player> players = new List<Player>();
-            ChooseGameType(players);
+            bool newGame = ChooseNewGameOrLoadGame();
+            RunNewOrLoadedGame(players, newGame);
+
             do
             {
-                
                 days = new List<Day>();
-                for (int i = 1; i <= 7; i++)
+                for (int i = players[0].loadedCurrentDay; i <= 7; i++)
                 {
                     foreach(Player player in players)
                     {
@@ -51,9 +44,10 @@ namespace LemonadeStand_3DayStarter
                         else
                         {
                             currentDay = i;
+                            player.loadedCurrentDay = currentDay;
                             InitializeDay(currentDay, player);
                             days[currentDay - 1].GenerateAmountOfCustomers(player);
-                            menu.DisplayGameMenu(player, store, days, currentDay, onePlayerGame, players);
+                            menu.DisplayGameMenu(player, store, days, currentDay, players);
                             SalePhase(days[currentDay - 1], player);
                         }
                     }
@@ -65,6 +59,73 @@ namespace LemonadeStand_3DayStarter
                 }
             }
             while (restartGameCheck == false);
+        }
+
+        public bool ChooseNewGameOrLoadGame()
+        {
+            int userInput;
+            bool newGame = true;
+            bool incorrectInput = true;
+
+            Console.WriteLine("Would you like to:\n1) Start New Game\n2) Load Game");
+            while (incorrectInput)
+            {
+                userInput = UserInterface.CheckMenuInput();
+                switch (userInput)
+                {
+                    case 1:
+                        newGame = true;
+                        incorrectInput = false;
+                        break;
+                    case 2:
+                        newGame = false;
+                        incorrectInput = false;
+                        break;
+                    default:
+                        incorrectInput = true;
+                        Console.WriteLine("Invalid Input");
+                        break;
+                }
+            }
+            return newGame;
+        }
+
+        public void RunNewOrLoadedGame(List<Player> players, bool newGame)
+        {
+            if (newGame)
+            {
+                ChooseGameType(players);
+            }
+            else
+            {
+                LoadGame(players);
+            }
+        }
+
+        public void LoadGame(List<Player> players)
+        {
+            loadedData = JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(@"C:\Users\chris\source\repos\LemonadeStand_3DayStarter\SaveFile.txt"));
+            foreach (PlayerData data in loadedData.playerData)
+            {
+                Player player = new Player() { name = data.Name };
+                players.Add(player);
+                player.loadedCurrentDay = data.CurrentDay;
+                player.wallet.LoadedMoney(data.Money);
+                player.inventory.AddCupsToInventory(data.NumberOfCups);
+                player.inventory.AddLemonsToInventory(data.NumberOfLemons);
+                player.inventory.AddSugarCubesToInventory(data.NumberOfSugarCubes);
+                player.inventory.AddIceCubesToInventory(data.NumberOfIceCubes);
+            }
+        }
+
+        // O- Open/closed principle because this method for choosing the player's name allows for more functionality when multiplayer is added
+        // The source code won't be changed to add more players; however, the new functionality can be added on
+        public string ChoosePlayerName()
+        {
+            string name;
+            Console.WriteLine("Choose the name of the player");
+            name = Console.ReadLine();
+            return name;
         }
 
         public void ChooseGameType(List<Player> players)
@@ -79,19 +140,13 @@ namespace LemonadeStand_3DayStarter
                 switch (userInput)
                 {
                     case 1:
-                        playerOne = new Player();
-                        ChoosePlayerName(playerOne);
-                        players.Add(playerOne);
+                        players.Add(new Player() { name = ChoosePlayerName() });
                         onePlayerGame = true;
                         correctInput = true;
                         break;
                     case 2:
-                        playerOne = new Player();
-                        ChoosePlayerName(playerOne);
-                        playerTwo = new Player();
-                        ChoosePlayerName(playerTwo);
-                        players.Add(playerOne);
-                        players.Add(playerTwo);
+                        players.Add(new Player() { name = ChoosePlayerName() });
+                        players.Add(new Player() { name = ChoosePlayerName() });
                         onePlayerGame = false;
                         correctInput = true;
                         break;
@@ -104,24 +159,12 @@ namespace LemonadeStand_3DayStarter
             while (correctInput == false);
         }
 
-        public void DisplayEndOfGame(List<Player> players)
-        {
-            if (onePlayerGame)
-            {
-                Console.WriteLine($"GAME OVER\n{playerOne.name} made it to day {currentDay}.\nYou made ${playerOne.totalProfits} total gross profit");
-            }
-            else
-            {
-                Console.WriteLine($"GAME OVER\n{playerOne.name} made it to day {currentDay}.\nYou made ${playerOne.totalProfits} total gross profit");
-                Console.WriteLine($"GAME OVER\n{playerTwo.name} made it to day {currentDay}.\nYou made ${playerTwo.totalProfits} total gross profit");
-            }
-
-            Console.WriteLine("Would you like to play again?\nY for yes\nN for no");
-            Console.ReadLine();
-        }
         public void InitializeDay(int currentDay, Player player)
         {
-            days.Add(new Day());
+            for (int i = 1; i <= player.loadedCurrentDay; i++)
+            {
+                days.Add(new Day());
+            }
             Console.WriteLine($"It is {player.name}'s turn.");
             Console.WriteLine($"It is Day: {currentDay}");
             Console.WriteLine($"The Weather Condition is: {days[currentDay - 1].weather.condition}");
@@ -199,6 +242,20 @@ namespace LemonadeStand_3DayStarter
             
         }
 
+        public void DisplayEndOfGame(List<Player> players)
+        {
+            if (onePlayerGame)
+            {
+                Console.WriteLine($"GAME OVER\n{players[0].name} made it to day {currentDay}.\nYou made ${players[0].totalProfits} total gross profit");
+            }
+            else
+            {
+                Console.WriteLine($"GAME OVER\n{players[0].name} made it to day {currentDay}.\nYou made ${players[0].totalProfits} total gross profit");
+                Console.WriteLine($"GAME OVER\n{players[1].name} made it to day {currentDay}.\nYou made ${players[1].totalProfits} total gross profit");
+            }
 
+            Console.WriteLine("Would you like to play again?\nY for yes\nN for no");
+            Console.ReadLine();
+        }
     }
 }

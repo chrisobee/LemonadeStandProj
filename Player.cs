@@ -12,6 +12,7 @@ namespace LemonadeStand_3DayStarter
         // member variables (HAS A)
         public string name;
         public double totalProfits;
+        public int loadedCurrentDay = 1;
         public Inventory inventory;
         public Wallet wallet;
         public Recipe recipe = new Recipe();

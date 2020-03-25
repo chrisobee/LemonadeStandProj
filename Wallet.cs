@@ -33,5 +33,10 @@ namespace LemonadeStand_3DayStarter
         {
             money += pricePerCup;
         }
+
+        public void LoadedMoney(double newMoney)
+        {
+            money = newMoney;
+        }
     }
 }

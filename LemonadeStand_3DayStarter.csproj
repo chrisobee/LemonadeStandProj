@@ -48,7 +48,7 @@
   <ItemGroup>
     <Compile Include="Cup.cs" />
     <Compile Include="Customer.cs" />
-    <Compile Include="Data.cs" />
+    <Compile Include="PlayerData.cs" />
     <Compile Include="Day.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="IceCube.cs" />
