@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -82,7 +83,7 @@ namespace LemonadeStand_3DayStarter
             return likelihood;
         }
 
-        public void GenerateAmountOfCustomers()
+        public void GenerateAmountOfCustomers(Player player)
         {
             int numberOfCustomers;
             int likelihood = GenerateLikelihood();

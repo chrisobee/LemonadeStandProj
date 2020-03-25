@@ -19,7 +19,7 @@ namespace LemonadeStand_3DayStarter
         //Constructor
         public Weather()
         {
-            
+
         }
         //Member Methods
         public string GenerateRandomCondition()
@@ -35,6 +35,6 @@ namespace LemonadeStand_3DayStarter
             return temp;
         }
 
-        
+
     }
 }

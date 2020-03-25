@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,6 +55,34 @@ namespace LemonadeStand_3DayStarter
                 }
             }
             return userInput;
+        }
+
+        public static bool CheckStringInput()
+        {
+            bool continueGame = false;
+            bool correctInput = false;
+            char tempCheck;
+            do
+            {
+                tempCheck = char.Parse(Console.ReadLine().ToLower());
+                switch (tempCheck)
+                {
+                    case 'y':
+                        continueGame = true;
+                        correctInput = false;
+                        break;
+                    case 'n':
+                        continueGame = false;
+                        correctInput = true;
+                        break;
+                    default:
+                        correctInput = false;
+                        break;
+                }
+            }
+            while (correctInput == false);
+
+            return continueGame;
         }
 
         public static bool CheckForEmptyPitcher(Pitcher pitcher)
