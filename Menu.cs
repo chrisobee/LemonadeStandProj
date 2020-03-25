@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,50 +10,63 @@ namespace LemonadeStand_3DayStarter
 {
     class Menu
     {
-        public void DisplayGameMenu(Player player, Store store, List<Day> days, int currentDay)
+        public void DisplayGameMenu(Player currentPlayer, Store store, List<Day> days, int currentDay, bool onePlayer, List<Player> allPlayers)
         {
             bool dayStarted = false;
 
             do
             {
                 Console.Clear();
-                Console.WriteLine($"Type in your choice\n1) View Day Info\n2) View Inventory\n3) Buy Cups\n4) Buy Lemons\n5) Buy Sugar Cubes\n6) Buy Ice Cubes\n7) Change Recipe/Price per Cup\n8) Start Day");
+                Console.WriteLine($"Type in your choice\n" +
+                                  $"1) View Day Info\n" +
+                                  $"2) View Inventory\n" +
+                                  $"3) Buy Cups\n" +
+                                  $"4) Buy Lemons\n" +
+                                  $"5) Buy Sugar Cubes\n" +
+                                  $"6) Buy Ice Cubes\n" +
+                                  $"7) Change Recipe/Price per Cup\n" +
+                                  $"8) Save Game\n" +
+                                  $"9) Start Day\n");
+                                 
                 int userInput = UserInterface.CheckMenuInput();
 
                 switch (userInput)
                 {
                     case 1:
-                        DisplayDayStats(player, days, currentDay);
+                        DisplayDayStats(currentPlayer, days, currentDay);
                         Console.ReadLine();
                         break;
                     case 2:
-                        player.DisplayInventory();
+                        currentPlayer.DisplayInventory();
                         Console.ReadLine();
                         break;
                     case 3:
-                        store.SellCups(player);
-                        Console.WriteLine($"${player.wallet.Money} Left");
+                        store.SellCups(currentPlayer);
+                        Console.WriteLine($"${currentPlayer.wallet.Money} Left");
                         Console.ReadLine();
                         break;
                     case 4:
-                        store.SellLemons(player);
-                        Console.WriteLine($"${player.wallet.Money} Left");
+                        store.SellLemons(currentPlayer);
+                        Console.WriteLine($"${currentPlayer.wallet.Money} Left");
                         Console.ReadLine();
                         break;
                     case 5:
-                        store.SellSugarCubes(player);
-                        Console.WriteLine($"${player.wallet.Money} Left");
+                        store.SellSugarCubes(currentPlayer);
+                        Console.WriteLine($"${currentPlayer.wallet.Money} Left");
                         Console.ReadLine();
                         break;
                     case 6:
-                        store.SellIceCubes(player);
-                        Console.WriteLine($"${player.wallet.Money} Left");
+                        store.SellIceCubes(currentPlayer);
+                        Console.WriteLine($"${currentPlayer.wallet.Money} Left");
                         Console.ReadLine();
                         break;
                     case 7:
-                        player.ChangeRecipe();
+                        currentPlayer.ChangeRecipe();
                         break;
                     case 8:
+                        SaveGame(allPlayers, currentDay, onePlayer);
+                        break;
+                    case 9:
                         dayStarted = true;
                         break;
                     default:
@@ -71,6 +85,32 @@ namespace LemonadeStand_3DayStarter
             Console.WriteLine($"The Weather Condition is: {days[currentDay - 1].weather.condition}");
             Console.WriteLine($"The Temperature is: {days[currentDay - 1].weather.temp}F");
             Console.WriteLine($"Your current fundage is: ${player.wallet.Money}");
+        }
+
+        public void SaveGame(List<Player> players, int currentDay, bool onePlayer)
+        {
+            SaveData saveData = new SaveData();
+            foreach(Player player in players)
+            {
+                PlayerData data = new PlayerData()
+                {
+                    Name = player.name,
+                    Money = player.wallet.Money,
+                    CurrentDay = currentDay,
+                    NumberOfCups = player.inventory.cups.Count(),
+                    NumberOfLemons = player.inventory.lemons.Count(),
+                    NumberOfSugarCubes = player.inventory.sugarCubes.Count(),
+                    NumberOfIceCubes = player.inventory.iceCubes.Count()
+                };
+                saveData.playerData.Add(data);
+            }
+                
+                string json = JsonConvert.SerializeObject(saveData);
+                string path = @"C:\Users\chris\source\repos\LemonadeStand_3DayStarter\SaveFile.txt";
+                File.WriteAllText(path, json);
+                SaveData loadedData = JsonConvert.DeserializeObject<SaveData>(File.ReadAllText(path));
+            path = string.Empty;
+            
         }
     }
 }

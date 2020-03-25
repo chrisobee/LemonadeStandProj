@@ -1,0 +1,1 @@
+{"playerData":[{"Name":"Chris","Money":20.0,"CurrentDay":1,"NumberOfCups":0,"NumberOfLemons":0,"NumberOfSugarCubes":0,"NumberOfIceCubes":0},{"Name":"Austi","Money":20.0,"CurrentDay":1,"NumberOfCups":0,"NumberOfLemons":0,"NumberOfSugarCubes":0,"NumberOfIceCubes":0}]}

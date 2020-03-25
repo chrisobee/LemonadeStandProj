@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,7 +53,7 @@ namespace LemonadeStand_3DayStarter
                             currentDay = i;
                             InitializeDay(currentDay, player);
                             days[currentDay - 1].GenerateAmountOfCustomers(player);
-                            menu.DisplayGameMenu(player, store, days, currentDay);
+                            menu.DisplayGameMenu(player, store, days, currentDay, onePlayerGame, players);
                             SalePhase(days[currentDay - 1], player);
                         }
                     }

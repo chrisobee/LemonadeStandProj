@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,8 +14,6 @@ namespace LemonadeStand_3DayStarter
         public double standardPricePerCup;
         public double profits;
         public int cupsSold;
-        Random rand = new Random();
-
         //Constructor
         public Day()
         {

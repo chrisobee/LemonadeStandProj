@@ -25,7 +25,7 @@ namespace LemonadeStand_3DayStarter
             return quantityOfItem;
         }
 
-        //S- Single Responsibility in this method because this method is used multiple times in the User Interface Class
+        //S- Single Responsibility in this method because this method is used multiple times in the Menu Class
         //This method just performs a int check from user input and does it efficiently.
         public static int CheckMenuInput()
         {
