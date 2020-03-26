@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using Newtonsoft.Json;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,19 +11,37 @@ namespace LemonadeStand_3DayStarter
     class Day
     {
         //Member Variables
+        //public Weather weather = new Weather();
+        public CurrentWeather weatherTest;
         public Weather weather = new Weather();
+        HttpClient client = new HttpClient();
         public List<Customer> customers;
         public double standardPricePerCup;
         public double profits;
         public int cupsSold;
+
+
         //Constructor
         public Day()
         {
             weather.condition = weather.GenerateRandomCondition();
             weather.temp = weather.GenerateRandomTemp();
+            DeserializeAPICall();
             customers = new List<Customer>();
         }
         //Member Methods
+        public async void DeserializeAPICall()
+        {
+            string cityName = "Muskego";
+            string apiKey = "c6f64df958a8c87acc09cebfa8a7d040";
+            string url = $"https://api.openweathermap.org/data/2.5/weather?q={cityName}&units=imperial&appid={apiKey}";
+            HttpResponseMessage response = await client.GetAsync(url);
+            string jsonResult = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                weatherTest = JsonConvert.DeserializeObject<CurrentWeather>(jsonResult);
+            }
+        }
         public int GenerateLikelihood()
         {
             int likelihood;

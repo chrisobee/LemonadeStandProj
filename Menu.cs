@@ -75,7 +75,6 @@ namespace LemonadeStand_3DayStarter
                 }
             }
             while (dayStarted == false);
-
         }
 
         public void DisplayDayStats(Player player, List<Day> days, int currentDay)

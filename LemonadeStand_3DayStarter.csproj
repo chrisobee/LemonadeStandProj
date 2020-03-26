@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Cup.cs" />
+    <Compile Include="CurrentWeather.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="PlayerData.cs" />
     <Compile Include="Day.cs" />

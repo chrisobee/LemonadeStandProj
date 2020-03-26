@@ -168,7 +168,7 @@ namespace LemonadeStand_3DayStarter
             Console.WriteLine($"It is {player.name}'s turn.");
             Console.WriteLine($"It is Day: {currentDay}");
             Console.WriteLine($"The Weather Condition is: {days[currentDay - 1].weather.condition}");
-            Console.WriteLine($"The Temperature is: {days[currentDay - 1].weather.temp}F");
+            Console.WriteLine($"The Temperature is: {days[currentDay - 1].weather.temp} F");
             Console.WriteLine($"Your current fundage is: ${player.wallet.Money}");
             Console.ReadLine();
         }
